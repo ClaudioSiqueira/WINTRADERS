@@ -12,10 +12,16 @@
     <a href="/" class="navbar-brand">
             WINTRADERS DO DIAMOND
     </a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item"> 
+            <a style="font-size: 20px;" class="nav-link" href="/login"> Login</a>
+        </li>
+    </ul>
 </nav>
     <br><br>
     <div class="container">
         <div class="card">
+            <h1 class="display-4" style="text-align: center;">Lista dos doentes</h1>
             <div class="card-body">
                 <table class="table table-bordered">
                     <thead>
@@ -27,28 +33,42 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <% dados.forEach(dado =>{ %>
                             <tr>
-                                <td>Juniki</td>
-                                <td>Megatronn</td>
-                                <td>Ahri adc, Rakan adc, Alistar adc e mais. Um dos maiores prerigos da soloQ Brasileira,
-                                    
+                                <td><%=dado.autor%></td>
+                                <td><%=dado.nome%></td>
+                                <td>
+                                    <%=dado.descricao%>
                                 </td>
                                 <td>
-                                    <button class="btn btn-warning">Editar</button>
-                                    <button class="btn btn-danger" style="position: relative; left: 20px;">Deletar</button>
+                                    <a href="/editar" class="btn btn-warning">Editar</a>
+                                    <form onclick="confirmarDel(event, this)" action="/criminoso/del/<%=dado.id%>" method="POST" style="display: inline;">
+                                        <button class="btn btn-danger" style="position: relative; left: 20px;">Deletar</button>
+                                    </form>
+                                    
                                 </td>
                             </tr>
+                        <%})%>
+
                     </tbody>
                 </table>
-                <br><br>
-                <button class="btn btn-success">Cadastrar novo meliante</button>
+                <br>
+                <a href="/cadastrar" class="btn btn-success">Cadastrar novo meliante</a>
             </div>
         </div>
         
 
     </div>
 </body>
-
+<script>
+    function confirmarDel(event, form){  // Recebe um evento, no caso o onsubmit
+        event.preventDefault() // Isso  faz com que o formulario n seja enviado
+        let decision = confirm('Você deseja deletar esse criminoso ?')
+        if (decision){
+            form.submit()
+        }
+    }
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="/js/bootstrap.min.js"></script>
