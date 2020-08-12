@@ -13,23 +13,28 @@
         </a>
     </nav>
     <br>
-    <div class="container">
+    <div class="container" onload="fillTextArea()">
         <div class="card" id="formulario-pergunta">
             <div class="card-header">
                 <h3>Edição de Meliante</h3>
             </div>
             <div class="card-body">
-                <form method="POST" action="/criminoso"> 
+                <form method="POST" action="/criminoso/update">
                     <label>Nome:</label>
-                    <input type="text" placeholder="Nickname do comédia" class="form-control" name="criminoso">
+                    <input value="<%=data.nome%>" type="text" placeholder="Nickname do comédia" class="form-control" name="criminoso">
                     <br>
                     <label>Descreva o crime cometido aqui:</label>
-                    <textarea placeholder="Não escreve mt se não da um bug que eu não sei arrumar xD" class="form-control" name="descricao"></textarea>
+                    <input type="hidden" name="id" value="<%=data.id%>">
+                    <input value="<%=data.descricao%>" placeholder="Não escreve mt se não da um bug que eu não sei arrumar xD" class="form-control" name="descricao"></input>
                     <br>
-                    <button type="submit" class="btn btn-success">Enviar</button>
+                    
+                        <button type="submit" class="btn btn-success">Enviar</button>
+        
                 </form>
             </div>
         </div>
 
     </div>
 </body>
+<script>
+</script>

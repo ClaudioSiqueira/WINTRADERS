@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Editar</title>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-primary">
+        <a href="/" class="navbar-brand">
+                WINTRADERS DO DIAMOND
+        </a>
+    </nav>
+
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+           <h2>Cadastrar novo usuário</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/criar/usuario" onsubmit="confirmPassword(event, this)">
+                <br>
+                <label for="">Nome:</label>
+                <input class="form-control" name="nome">
+                <br>
+                <label for="">Senha:</label>
+                <input class="form-control" type="password" id="password" name="password" placeholder="*******"><br>
+                <label for="">Confirmar senha:</label>
+                <input class="form-control" type="password" id="password2" placeholder="*******"><br>
+                <button class="btn btn-success btn-block">Enviar</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    function confirmPassword(event, form){
+        event.preventDefault()
+        let password = document.getElementById('password').value
+        let password2 = document.getElementById('password2').value
+        if (password == password2){
+            form.submit()
+        }else{
+            alert('As senhas estão diferentes, por favor preencha novamente.')
+        }
+    }
+</script>
+<script>
+</script>

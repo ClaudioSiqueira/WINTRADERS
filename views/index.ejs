@@ -41,7 +41,7 @@
                                     <%=dado.descricao%>
                                 </td>
                                 <td>
-                                    <a href="/editar" class="btn btn-warning">Editar</a>
+                                    <a href="/criminoso/edit/<%=dado.id%>" class="btn btn-warning">Editar</a>
                                     <form onclick="confirmarDel(event, this)" action="/criminoso/del/<%=dado.id%>" method="POST" style="display: inline;">
                                         <button class="btn btn-danger" style="position: relative; left: 20px;">Deletar</button>
                                     </form>
