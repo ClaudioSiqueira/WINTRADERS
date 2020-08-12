@@ -110,10 +110,15 @@ app.get('/new_user', (req, res) =>{
 app.post('/criar/usuario', (req, res) =>{
     let nome = req.body.nome
     let password = req.body.password
+
+    let salt = bcrypt.genSaltSync(10)
+    let hash = bcrypt.hashSync(password, salt)
+
     if(nome != undefined && password != undefined){
-        database.insert({nome:nome, password:password}).table('admin').then(dados =>{
+        database.insert({nome:nome, password:hash}).table('admin').then(dados =>{
             res.redirect('/')
         }).catch(err =>{
+            console.log(err)
             res.redirect('/new_user')
         })
     }else{
