@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const database = require('./database')
 const bcrypt = require('bcryptjs')
+const session = require('express-session')
 
 
 
@@ -10,6 +11,26 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
+
+
+// SESSION
+app.use(session({
+    secret:'qualquercoisa',
+    cookie:{maxAge:3000000}
+}))
+
+
+/*
+app.get('/gerarsession', (req, res) =>{
+    req.session.autor = 'Juniki'
+    req.session.criminoso = 'Megatronn'
+    res.send('Session gerada')
+})
+
+app.get('/lersession', (req, res) =>{
+    res.send([req.session.autor, req.session.criminoso])
+})
+*/
 
 
 app.get('/', (req, res) =>{
@@ -24,19 +45,19 @@ app.get('/', (req, res) =>{
 })
 
 
-app.get('/cadastrar', (req, res) =>{
+app.get('/cadastrar',middleware, (req, res) =>{
     res.render('cadastrar')
 })
 
 
-app.post('/criminoso', (req, res) =>{
+app.post('/criminoso',middleware, (req, res) =>{
     let criminoso = req.body.criminoso
     let descricao = req.body.descricao
 
     let dados = {
         nome: criminoso,
         descricao: descricao,
-        autor: 'teste'
+        autor: req.session.user.nome
     }
 
     if(criminoso != undefined){
@@ -50,7 +71,7 @@ app.post('/criminoso', (req, res) =>{
     }
 })
 
-app.post('/criminoso/del/:id', (req, res) =>{
+app.post('/criminoso/del/:id',middleware, (req, res) =>{
     let id = req.params.id
     if(id != undefined){
         database.where({id: id}).delete().table('criminosos').then(dados =>{
@@ -64,7 +85,7 @@ app.post('/criminoso/del/:id', (req, res) =>{
 
 
 
-app.get('/criminoso/edit/:id', (req, res) =>{
+app.get('/criminoso/edit/:id',middleware, (req, res) =>{
     let id = req.params.id
     if(id != undefined){
         database.select().where({id:id}).table('criminosos').then(data =>{
@@ -77,7 +98,7 @@ app.get('/criminoso/edit/:id', (req, res) =>{
     }
 })
 
-app.post('/criminoso/update', (req, res) =>{
+app.post('/criminoso/update',middleware, (req, res) =>{
     let nome = req.body.criminoso
     let descricao = req.body.descricao
     let id = req.body.id
@@ -103,11 +124,16 @@ app.post('/criminoso/update', (req, res) =>{
     }
 })
 
-app.get('/new_user', (req, res) =>{
+
+app.get('/login', (req, res) =>{
+    res.render('login')
+})
+
+app.get('/new_user',middleware, (req, res) =>{
     res.render('new_user')
 })
 
-app.post('/criar/usuario', (req, res) =>{
+app.post('/criar/usuario',middleware, (req, res) =>{
     let nome = req.body.nome
     let password = req.body.password
 
@@ -128,10 +154,40 @@ app.post('/criar/usuario', (req, res) =>{
 
 app.post('/authenticate', (req, res) =>{
     let nome = req.body.nome
-    let senha = req.body.senha
-    res.send({nome:nome, senha:senha})
+    let senha = req.body.password
     
+    database.where({nome:nome}).select().table('admin').then(data =>{
+        let user = data[0]
+        if(user != undefined){
+            let correct = bcrypt.compareSync(senha, user.password)
+            if(correct){
+                req.session.user = {
+                    id: user.id,
+                    nome:user.nome
+                }
+                res.redirect('/')
+            }else{
+                res.redirect('/login')
+            }
+
+        }else{
+            res.redirect('/login')
+        }
+        
+    }).catch(err =>{
+        res.redirect('/')
+    })
 })
+
+
+
+function middleware(req, res, next){
+    if(req.session.user != undefined){
+        next()
+    }else{
+        res.redirect('/login')
+    }
+}
 
 app.listen(9000, err =>{
     console.log('Servidor abriu !')
