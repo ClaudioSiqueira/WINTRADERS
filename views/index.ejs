@@ -14,7 +14,7 @@
     </a>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item"> 
-            <a style="font-size: 20px;" class="nav-link" href="/login"> Login</a>
+                <a style="font-size: 20px;" class="nav-link" href="/login"> <%=nome%> </a>             
         </li>
     </ul>
 </nav>
@@ -24,6 +24,7 @@
             <h1 class="display-4" style="text-align: center;">Lista dos doentes</h1>
             <div class="card-body">
                 <table class="table table-bordered">
+                    <%if(nome != 'Login'){%>
                     <thead>
                         <tr>
                             <th>Autor</th>
@@ -33,22 +34,43 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% dados.forEach(dado =>{ %>
-                            <tr>
-                                <td><%=dado.autor%></td>
-                                <td><%=dado.nome%></td>
-                                <td>
-                                    <%=dado.descricao%>
-                                </td>
-                                <td>
-                                    <a href="/criminoso/edit/<%=dado.id%>" class="btn btn-warning">Editar</a>
-                                    <form onclick="confirmarDel(event, this)" action="/criminoso/del/<%=dado.id%>" method="POST" style="display: inline;">
-                                        <button class="btn btn-danger" style="position: relative; left: 20px;">Deletar</button>
-                                    </form>
-                                    
-                                </td>
-                            </tr>
-                        <%})%>
+                        
+                            <% dados.forEach(dado =>{ %>
+                                <tr>
+                                    <td><%=dado.autor%></td>
+                                    <td><%=dado.nome%></td>
+                                    <td>
+                                        <%=dado.descricao%>
+                                    </td>
+                                    <td>
+                                        <a href="/criminoso/edit/<%=dado.id%>" class="btn btn-warning">Editar</a>
+                                        <form onclick="confirmarDel(event, this)" action="/criminoso/del/<%=dado.id%>" method="POST" style="display: inline;">
+                                            <button class="btn btn-danger" style="position: relative; left: 20px;">Deletar</button>
+                                        </form>
+                                        
+                                    </td>
+                                </tr>
+                            <%})%>
+                        <%}else{%>
+                            <thead>
+                                <tr>
+                                    <th>Autor</th>
+                                    <th>Criminoso</th>
+                                    <th>Descrição do Crime</th>
+                                </tr>
+                            </thead>
+                           <%dados.forEach(dado =>{%>
+                                <tr>
+                                    <td><%=dado.autor%></td>
+                                    <td><%=dado.nome%></td>
+                                    <td>
+                                        <%=dado.descricao%>
+                                    </td>
+                                </tr>
+                           <%})%>
+                        <%}%>
+
+
 
                     </tbody>
                 </table>
@@ -57,7 +79,6 @@
             </div>
         </div>
         
-
     </div>
 </body>
 <script>

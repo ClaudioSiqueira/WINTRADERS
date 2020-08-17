@@ -34,8 +34,13 @@ app.get('/lersession', (req, res) =>{
 
 
 app.get('/', (req, res) =>{
+    let nome = 'Login'
+    if(req.session.user != undefined){
+        nome = req.session.user.nome
+    }
+    
     database.select(['id','autor', 'nome', 'descricao']).table('criminosos').then(dados =>{
-        res.render('index', {dados:dados})
+        res.render('index', {dados:dados, nome: nome})
         res.status(200)
     }).catch(err =>{
         console.log(err)
@@ -179,6 +184,11 @@ app.post('/authenticate', (req, res) =>{
     })
 })
 
+
+app.get('/logout', (req, res) =>{
+    req.session.user = undefined
+    res.redirect('/')
+})
 
 
 function middleware(req, res, next){
